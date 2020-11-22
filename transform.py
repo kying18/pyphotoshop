@@ -111,9 +111,9 @@ if __name__ == '__main__':
     blur_15.write_image('blur_k15.png')
 
     # let's apply a sobel edge detection kernel on the x and y axis
-    sobel_x = apply_kernel(city, np.array([[1, 0, -1], [2, 0, -2], [1, 0, -1]]))
+    sobel_x = apply_kernel(city, np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]]))
     sobel_x.write_image('edge_x.png')
-    sobel_y = apply_kernel(city, np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]]))
+    sobel_y = apply_kernel(city, np.array([[1, 0, -1], [2, 0, -2], [1, 0, -1]]))
     sobel_y.write_image('edge_y.png')
 
     # let's combine these and make an edge detector!
