@@ -94,41 +94,69 @@ def combine_images(image1, image2):
                 new_im.array[x, y, c] = (image1.array[x, y, c]**2 + image2.array[x, y, c]**2)**0.5
     return new_im
     
+#made function accept input from user
 if __name__ == '__main__':
-    lake = Image(filename='lake.png')
-    city = Image(filename='city.png')
+    ask = input('What picture you wanna process? : ')
+    lake = Image(filename= ask+'.png')
+    
+    #city = Image(filename='city.png')
+  
+    print('Choose One Of The Function')
+    print('Brighten, Contrast, Blur, Kernel, Combine')
+    function = input('Your Choice: ').lower()
+    if function == 'brighten':
+        name = input('What your new picture name? ')
+        add_size3 = float(input('Add your size: '))
+        brightened_im = brighten(lake, add_size3)
+        brightened_im.write_image(name +'.png')
+    elif function == 'contrast':
+        name = input('What your new picture name? ')
+        add_size1 = float(input('Input first size: '))
+        add_size2 = float(input('Input second size: '))
+        contrast = adjust_contrast(lake, add_size1, add_size2)
+        contrast.write_image(name + '.png')
+    elif function == 'blur':
+        name = input('What your new picture name? ')
+        add_size4 = int(input('Add your size: '))
+        blur_3 = blur(lake, add_size4)
+        blur_3.write_image(name + '.png')
+    elif function == 'kernel':
+        name1 = input('What your new x kernel picture name? ')
+        name2 = input('What your new y kernel picture name? ')
+        sobel_x_kernel = np.array([
+            [1,2,1], 
+            [0,0,0], 
+            [-1,-2,-1]
+        ])
+        sobel_y_kernel = np.array([
+            [1,0,-1],
+            [2,0,-2],
+            [1,0,-1]
+        ])
 
-    # brightening
-    brightened_im = brighten(lake, 1.7)
-    brightened_im.write_image('brightened.png')
+        sobel_x = apply_kernel(lake, sobel_x_kernel)
+        sobel_x.write_image(name1 + '.png')
+        sobel_y = apply_kernel(lake, sobel_y_kernel)
+        sobel_y.write_image(name2 + '.png')
+    elif function == 'combine':
+        name1 = input('What your new picture name? ')
+        sobel_x_kernel = np.array([
+            [1,2,1], 
+            [0,0,0], 
+            [-1,-2,-1]
+        ])
+        sobel_y_kernel = np.array([
+            [1,0,-1],
+            [2,0,-2],
+            [1,0,-1]
+        ])
 
-    # darkening
-    darkened_im = brighten(lake, 0.3)
-    darkened_im.write_image('darkened.png')
-
-    # increase contrast
-    incr_contrast = adjust_contrast(lake, 2, 0.5)
-    incr_contrast.write_image('increased_contrast.png')
-
-    # decrease contrast
-    decr_contrast = adjust_contrast(lake, 0.5, 0.5)
-    decr_contrast.write_image('decreased_contrast.png')
-
-    # blur using kernel 3
-    blur_3 = blur(city, 3)
-    blur_3.write_image('blur_k3.png')
-
-    # blur using kernel size of 15
-    blur_15 = blur(city, 15)
-    blur_15.write_image('blur_k15.png')
-
-    # let's apply a sobel edge detection kernel on the x and y axis
-    sobel_x = apply_kernel(city, np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]]))
-    sobel_x.write_image('edge_x.png')
-    sobel_y = apply_kernel(city, np.array([[1, 0, -1], [2, 0, -2], [1, 0, -1]]))
-    sobel_y.write_image('edge_y.png')
-
-    # let's combine these and make an edge detector!
-    sobel_xy = combine_images(sobel_x, sobel_y)
-    sobel_xy.write_image('edge_xy.png')
+        sobel_x = apply_kernel(lake, sobel_x_kernel)
+        
+        sobel_y = apply_kernel(lake, sobel_y_kernel)
+        
+        sobel_xy = combine_images(sobel_x, sobel_y)
+        sobel_xy.write_image(name1 + '.png')
+     else:
+        quit()
 
